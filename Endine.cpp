@@ -2,10 +2,41 @@
 //
 
 #include <iostream>
+#include "Subject.h"
+#include "Engine.h"
+#include "Wrapper.h"
+int main() {
 
-int main()
-{
-    std::cout << "Hello World!\n";
+    Subject subj("this is a test. it is a simple test!");
+
+
+    auto replaceWrapper = std::make_shared<Wrapper<Subject>>(
+        &subj, &Subject::replace_words);
+    auto findWrapper = std::make_shared<Wrapper<Subject>>(
+        &subj, &Subject::find_phrase);
+    auto capitalizeWordsWrapper = std::make_shared<Wrapper<Subject>>(
+        &subj, &Subject::capitalize_words);
+    auto capitalizeSentencesWrapper = std::make_shared<Wrapper<Subject>>(
+        &subj, &Subject::capitalize_sentences);
+    auto numberSentencesWrapper = std::make_shared<Wrapper<Subject>>(
+        &subj, &Subject::number_sentences);
+
+  
+    Engine engine;
+    engine.register_command("replace", replaceWrapper);
+    engine.register_command("find", findWrapper);
+    engine.register_command("capitalize_words", capitalizeWordsWrapper);
+    engine.register_command("capitalize_sentences", capitalizeSentencesWrapper);
+    engine.register_command("number_sentences", numberSentencesWrapper);
+
+
+    std::cout << engine.execute("replace", { {"from", "test"}, {"to", "experiment"} }) << std::endl;
+    std::cout << engine.execute("find", { {"phrase", "experiment"} }) << std::endl;
+    std::cout << engine.execute("capitalize_words", {}) << std::endl;
+    std::cout << engine.execute("capitalize_sentences", {}) << std::endl;
+    std::cout << engine.execute("number_sentences", {}) << std::endl;
+
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

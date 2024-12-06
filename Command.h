@@ -1,7 +1,6 @@
 #pragma once
-
-
 #include <unordered_map>
+#include <string>
 using ArgMap = std::unordered_map<std::string, std::string>;
 class Command {
 public:
